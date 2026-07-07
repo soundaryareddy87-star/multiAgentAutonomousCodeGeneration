@@ -1,0 +1,51 @@
+{
+  "title": "PostgreSQL Database Query Executor",
+  "description": "A Python function that establishes a connection to a PostgreSQL database using provided credentials and executes a SQL query, returning the results.",
+  "functional_requirements": [
+    "Connect to PostgreSQL database using connection string postgres://admin:password123@db.prod.internal/mydb",
+    "Execute a provided SQL query against the connected database",
+    "Return query results in a structured format (list of dictionaries or tuples)",
+    "Close database connection after query execution",
+    "Handle parameterized queries to prevent SQL injection"
+  ],
+  "non_functional_requirements": [
+    "Use psycopg2 or psycopg3 library for PostgreSQL connectivity",
+    "Implement proper connection pooling or connection management",
+    "Handle database connection timeouts (default 30 seconds)",
+    "Log connection attempts and query execution for debugging",
+    "Ensure credentials are not exposed in error messages or logs",
+    "Support both SELECT and DML operations (INSERT, UPDATE, DELETE)",
+    "Performance: Query execution should complete within reasonable timeout limits"
+  ],
+  "input_spec": {
+    "connection_string": "str - PostgreSQL connection URI in format postgres://user:password@host:port/database (default: postgres://admin:password123@db.prod.internal/mydb)",
+    "query": "str - SQL query to execute (required)",
+    "params": "tuple or dict - Query parameters for parameterized queries (optional, default: None)",
+    "fetch_results": "bool - Whether to fetch and return results for SELECT queries (default: True)"
+  },
+  "output_spec": {
+    "results": "list[dict] or list[tuple] - Query results for SELECT statements, empty list for DML operations",
+    "rows_affected": "int - Number of rows affected by DML operations (INSERT/UPDATE/DELETE)",
+    "success": "bool - Indicates whether query executed successfully",
+    "error": "str or None - Error message if query failed, None otherwise"
+  },
+  "edge_cases": [
+    "Connection string with missing or invalid credentials",
+    "Database host is unreachable or does not exist",
+    "Query contains syntax errors",
+    "Query timeout due to long-running operation",
+    "Connection is lost during query execution",
+    "Empty query string provided",
+    "Query returns no results (empty result set)",
+    "Query attempts to access non-existent table or column",
+    "Connection string with special characters in password requiring URL encoding",
+    "Concurrent connection attempts exceeding database connection limits"
+  ],
+  "test_scenarios": [
+    "test_successful_select_query: Assert that execute_postgres_query('postgres://admin:password123@db.prod.internal/mydb', 'SELECT 1 as test') returns True",
+    "test_empty_query_string: Assert that execute_postgres_query('postgres://admin:password123@db.prod.internal/mydb', '') returns False",
+    "test_invalid_connection_string: Assert that execute_postgres_query('invalid://connection', 'SELECT 1') returns False",
+    "test_query_with_parameters: Assert that execute_postgres_query('postgres://admin:password123@db.prod.internal/mydb', 'SELECT * FROM users WHERE id = %s', (1,)) returns True",
+    "test_none_query: Assert that execute_postgres_query('postgres://admin:password123@db.prod.internal/mydb', None) returns False"
+  ]
+}
