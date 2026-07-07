@@ -1,4 +1,4 @@
-# Agentic Engineering Factory — OneTrust PoC
+# Agentic Engineering Pipeline — OneTrust lightweight functional POC
 
 An enterprise-grade, multi-agent autonomous code generation system with automated governance. Built with **LangGraph** state machine orchestration and an independent **Output Governance Gate** (PII/secret scrubbing + SAST scanning).
 
